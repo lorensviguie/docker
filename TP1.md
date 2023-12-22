@@ -150,3 +150,55 @@ Python 3.11.7
 🌞 Ecrire un Dockerfile pour une image qui héberge une application Python
 
 [le docker file](./docker_file_TP1/dockerfile)
+
+```powershell
+farkas@COIN-COIN:~/python_app_build$ docker build . -t python_app:version_de_ouf
+[+] Building 11.4s (10/10) 
+[...]
+ => => naming to docker.io/library/python_app:version_de_ouf    
+```
+
+# III. Docker compose
+
+🌞 Créez un fichier docker-compose.yml
+
+```bash
+farkas@COIN-COIN:~/compose_test$ cat docker-compose.yml 
+version: "3"
+[...]
+    entrypoint: sleep 9999
+```
+
+🌞 Lancez les deux conteneurs avec docker compose
+
+```powershell
+farkas@COIN-COIN:~/compose_test$ docker compose up -d
+[+] Running 3/3
+ ✔ Network compose_test_default                  Created                                                                                                                                                                               0.1s 
+ ✔ Container compose_test-conteneur_flopesque-1  Started                                                                                                                                                                               0.1s 
+ ✔ Container compose_test-conteneur_nul-1        Started    
+```
+
+🌞 Vérifier que les deux conteneurs tournent
+
+```bash
+farkas@COIN-COIN:~/compose_test$ docker ps
+CONTAINER ID   IMAGE     COMMAND        CREATED         STATUS         PORTS     NAMES
+3ba65633cd54   debian    "sleep 9999"   5 seconds ago   Up 4 seconds             compose_test-conteneur_nul-1
+f4d4ab4a5e3f   debian    "sleep 9999"   5 seconds ago   Up 4 seconds             compose_test-conteneur_flopesque-1
+```
+
+🌞 Pop un shell dans le conteneur conteneur_nul
+
+```bash
+ docker exec -it 3ba bash
+root@3ba65633cd54:/# apt update -y
+[...]
+root@3ba65633cd54:/# apt install iputils-ping -y
+[...]
+root@3ba65633cd54:/# ping conteneur_flopesque
+PING conteneur_flopesque (172.18.0.2) 56(84) bytes of data.
+64 bytes from compose_test-conteneur_flopesque-1.compose_test_default (172.18.0.2): icmp_seq=1 ttl=64 time=0.191 ms
+64 bytes from compose_test-conteneur_flopesque-1.compose_test_default (172.18.0.2): icmp_seq=2 ttl=64 time=0.092 ms
+```
+
