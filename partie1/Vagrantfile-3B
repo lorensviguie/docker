@@ -1,0 +1,32 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "super_box"
+
+  config.vm.define "alice.tp3.b2" do |alice|
+    alice.vm.network "private_network", type: "static", ip: "10.3.1.11"
+    alice.vm.hostname = "alice.tp3.b2"
+    alice.vm.network "forwarded_port", guest: 80, host: 8081
+    alice.vm.network "public_network"
+    alice.vm.provider "virtualbox" do |vb|
+      vb.memory = "1024"
+    end
+  end
+
+  config.vm.define "bob.tp3.b2" do |bob|
+    bob.vm.network "private_network", type: "static", ip: "10.3.1.200"
+    bob.vm.hostname = "bob.tp3.b2"
+    bob.vm.network "forwarded_port", guest: 80, host: 8082
+    bob.vm.provider "virtualbox" do |vb|
+      vb.memory = "2048"
+    end
+  end
+
+  config.vm.define "eve.tp3.b2" do |eve|
+    eve.vm.network "private_network", type: "static", ip: "10.3.1.57"
+    eve.vm.hostname = "eve.tp3.b2"
+    eve.vm.network "forwarded_port", guest: 80, host: 8083
+    eve.vm.network "public_network"
+    eve.vm.provider "virtualbox" do |vb|
+      vb.memory = "1024"
+    end
+  end
+end
