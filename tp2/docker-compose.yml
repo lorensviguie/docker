@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    restart: always
+    restart: unless-stopped
     volumes:
       - ./app:/var/www/html
     command: bash -c "echo 'App is ready on http://localhost:80' && apache2-foreground"
@@ -13,7 +13,7 @@ services:
   db:
     image: mysql
     command: --default-authentication-plugin=mysql_native_password
-    restart: always
+    restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: root
     volumes:
@@ -21,7 +21,7 @@ services:
 
   phpmyadmin:
     image: phpmyadmin
-    restart: always
+    restart: unless-stopped
     environment:
       PMA_ARBITRARY: 1
       PMA_HOST: db
@@ -30,7 +30,7 @@ services:
 
   nginx:
     image: nginx
-    restart: always
+    restart: unless-stopped
     ports:
       - "80:80"
       - "443:443"
