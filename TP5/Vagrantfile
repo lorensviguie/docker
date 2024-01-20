@@ -1,0 +1,78 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "rockylinux/9"
+  config.vm.define "web1.tp5.b2" do |web|
+    web.vm.network "private_network", type: "static", ip: "10.5.1.11"
+    web.vm.hostname = "web1.tp5.b2"
+    web.vm.network "forwarded_port", guest: 443, host: 5011
+    web.vm.network "public_network"
+    web.vm.synced_folder ".", "/vagrant", disabled: true
+    web.vm.provider "virtualbox" do |vb|
+      vb.memory = "512"
+    end
+    web.vm.provision "shell", path: "./web/setup.sh"
+  end
+  config.vm.define "web2.tp5.b2" do |web|
+    web.vm.network "private_network", type: "static", ip: "10.5.1.12"
+    web.vm.hostname = "web2.tp5.b2"
+    web.vm.network "public_network"
+    web.vm.synced_folder ".", "/vagrant", disabled: true
+    web.vm.provider "virtualbox" do |vb|
+      vb.memory = "512"
+    end
+    web.vm.provision "shell", path: "./web/setup.sh"
+  end
+  config.vm.define "web3.tp5.b2" do |web|
+    web.vm.network "private_network", type: "static", ip: "10.5.1.13"
+    web.vm.hostname = "web3.tp5.b2"
+    web.vm.network "public_network"
+    web.vm.synced_folder ".", "/vagrant", disabled: true
+    web.vm.provider "virtualbox" do |vb|
+      vb.memory = "512"
+    end
+    web.vm.provision "shell", path: "./web/setup.sh"
+  end
+  config.vm.define "rp1.tp5.b2" do |rp|
+    rp.vm.network "private_network", type: "static", ip: "10.5.1.111"
+    rp.vm.hostname = "rp1.tp5.b2"
+    rp.vm.network "forwarded_port", guest: 80, host: 5111
+    rp.vm.network "public_network"
+    rp.vm.synced_folder ".", "/vagrant", disabled: true
+    rp.vm.provider "virtualbox" do |vb|
+      vb.memory = "512"
+    end
+    rp.vm.provision "shell", path: "./rp/setup1.sh"
+  end
+  config.vm.define "rp2.tp5.b2" do |rp|
+    rp.vm.network "private_network", type: "static", ip: "10.5.1.112"
+    rp.vm.hostname = "rp2.tp5.b2"
+    rp.vm.network "forwarded_port", guest: 80, host: 5112
+    rp.vm.network "public_network"
+    rp.vm.synced_folder ".", "/vagrant", disabled: true
+    rp.vm.provider "virtualbox" do |vb|
+      vb.memory = "512"
+    end
+    rp.vm.provision "shell", path: "./rp/setup2.sh"
+  end
+  config.vm.define "db1.tp5.b2" do |db|
+    db.vm.network "private_network", type: "static", ip: "10.5.1.211"
+    db.vm.hostname = "db1.tp5.b2"
+    db.vm.network "forwarded_port", guest: 3306, host: 5211
+    db.vm.network "public_network"
+    db.vm.synced_folder ".", "/vagrant", disabled: true
+    db.vm.provider "virtualbox" do |vb|
+      vb.memory = "512"
+    end
+    db.vm.provision "shell", path: "./db/setup1.sh"
+  end
+  config.vm.define "db2.tp5.b2" do |db|
+    db.vm.network "private_network", type: "static", ip: "10.5.1.212"
+    db.vm.hostname = "db2.tp5.b2"
+    db.vm.network "forwarded_port", guest: 3306, host: 5212
+    db.vm.network "public_network"
+    db.vm.synced_folder ".", "/vagrant", disabled: true
+    db.vm.provider "virtualbox" do |vb|
+      vb.memory = "512"
+    end
+    db.vm.provision "shell", path: "./db/setup2.sh"
+  end
+end
